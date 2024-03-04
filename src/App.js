@@ -77,13 +77,16 @@ function App() {
 			if (res.status === 200) {
 				
 					setUserOutput(res.data);
-					toast.success("Compilation Successfull...");
-			} else {
-				
-					setUserOutput('Complilation Error!');
+					toast.success("Compilation Successfull!");
+			} 
+			if (res.status === 201){
+
+
+					setUserOutput(res.data);
 					toast.error("Compilation Error!");
 
-			}
+			} 
+			
 			
 			
 			console.log(res.data);

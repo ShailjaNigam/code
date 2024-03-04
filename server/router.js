@@ -24,14 +24,17 @@ const checkStatus = async (token, res) => {
             return;
         } else {
             //setProcessing(false);
-            const output = atob(response.data.stdout);
+            
+            if (response.data.stdout === null) {
+                res.status(201).json('Compilation Error!')
+            } 
 
-            if (output === null) {
-                res.status(202).json('Error!');
-                console.log("error:" ,response.data)
-            } else {
+            else {
+                const output = atob(response.data.stdout);
                 res.status(200).json(output);
             }
+
+            
             
            // setOutputDetails(response.data);
            // showSuccessToast(`Compiled Successfully!`);
