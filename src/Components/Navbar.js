@@ -19,7 +19,13 @@ const Navbar = ({ userLang: language, setUserLang: setLanguage, userTheme,
 					console.log("id: ", e.id);
 				}}
 				
-				placeholder={language.value} />
+				placeholder={language.value} 
+				styles={{
+					control: (provided) => ({
+						...provided,
+						minWidth: '200px',
+					}),
+				}}/>
 			<Select options={themes} value={userTheme}
 				onChange={(e) => setUserTheme(e.value)}
 				placeholder={userTheme} />
