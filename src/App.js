@@ -5,7 +5,7 @@ import Navbar from './Components/Navbar';
 import { languageOptions } from './languageOptions';
 import {compileSourceCode} from './API/compileAPI';
 import toast, { Toaster } from 'react-hot-toast';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 const javascriptDefault = 
 `#include<stdio.h>
