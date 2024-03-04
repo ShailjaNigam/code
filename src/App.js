@@ -53,6 +53,8 @@ function App() {
 			source_code: btoa(code),
 			stdin: btoa(customInput),
 		}
+
+
 		
 		try {
 			const res = await compileSourceCode(formData);
@@ -79,6 +81,8 @@ function App() {
 			console.log(error);
 		}
 	}
+
+
 
 	// Function to clear the output screen
 	function clearOutput() {
@@ -127,7 +131,10 @@ return (
 				userTheme={userTheme} setUserTheme={setUserTheme}
 				fontSize={fontSize} setFontSize={setFontSize}
 				code={code}
+				
 			/>
+				
+
 			<div className="main">
 				<div className="left-container">
 					<Editor
@@ -166,6 +173,7 @@ return (
 
 				</div>
 			</div>
+		
 		</div>
 	</>
 	);

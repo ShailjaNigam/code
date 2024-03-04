@@ -33,3 +33,11 @@
 	background-color: #474747 !important;
 	border-color: #afec3f !important;
 }
+
+.custom-download-btn {
+    background-color: #afec3f;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}

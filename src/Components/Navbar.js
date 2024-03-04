@@ -4,7 +4,7 @@ import './Navbar.css';
 import { languageOptions } from '../languageOptions';
 
 const Navbar = ({ userLang: language, setUserLang: setLanguage, userTheme,
-	setUserTheme, fontSize, setFontSize, code }) => {
+	setUserTheme, fontSize, setFontSize, code, onFileUpload, setCode }) => {
 	const languages = languageOptions;
 	const themes = [
 		{ value: "vs-dark", label: "Dark" },
@@ -42,6 +42,9 @@ const Navbar = ({ userLang: language, setUserLang: setLanguage, userTheme,
         element.click();
     };
 
+	
+	
+
 	return (
 		<div className="navbar">
 			<h1>Code Editor</h1>
@@ -67,11 +70,12 @@ const Navbar = ({ userLang: language, setUserLang: setLanguage, userTheme,
 				onChange={(e) => { setFontSize(e.target.value) }} />
 				  {/* Your existing JSX code */}
 				  <div className="download-btn-container">
-                <button onClick={downloadCodeFile} className="download-btn">
+                <button onClick={downloadCodeFile} className="download-btn custom-download-btn">
                     Download Code
                 </button>
             </div>
             {/* Your existing JSX code */}
+			
 		</div>
 	)
 }
