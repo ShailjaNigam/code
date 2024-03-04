@@ -1,15 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
 import './Navbar.css';
+import { languageOptions } from '../languageOptions';
 
-const Navbar = ({ userLang, setUserLang, userTheme,
+const Navbar = ({ userLang: language, setUserLang: setLanguage, userTheme,
 	setUserTheme, fontSize, setFontSize }) => {
-	const languages = [
-		{ value: "c", label: "C" },
-		{ value: "cpp", label: "C++" },
-		{ value: "python", label: "Python" },
-		{ value: "java", label: "Java" },
-	];
+	const languages = languageOptions;
 	const themes = [
 		{ value: "vs-dark", label: "Dark" },
 		{ value: "light", label: "Light" },
@@ -17,9 +13,13 @@ const Navbar = ({ userLang, setUserLang, userTheme,
 	return (
 		<div className="navbar">
 			<h1>Code Editor</h1>
-			<Select options={languages} value={userLang}
-				onChange={(e) => setUserLang(e.value)}
-				placeholder={userLang} />
+			<Select options={languages} value={language.value}
+				onChange={(e) => {
+					setLanguage(e);
+					console.log("id: ", e.id);
+				}}
+				
+				placeholder={language.value} />
 			<Select options={themes} value={userTheme}
 				onChange={(e) => setUserTheme(e.value)}
 				placeholder={userTheme} />

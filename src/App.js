@@ -1,17 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Editor from "@monaco-editor/react";
 import Navbar from './Components/Navbar';
-import Axios from 'axios';
 import spinner from './spinner.svg';
+import toast, {Toaster} from 'react-hot-toast';
+import { languageOptions } from './languageOptions';
+import {compileSourceCode} from './API/compileAPI';
+
+const javascriptDefault = 
+`#include<stdio.h>
+int main() {
+    int intType;
+    float floatType;
+    double doubleType;
+    char charType;
+
+    // sizeof evaluates the size of a variable
+    printf("Size of int: %zu bytes\n", sizeof(intType));
+    printf("Size of float: %zu bytes\n", sizeof(floatType));
+    printf("Size of double: %zu bytes\n", sizeof(doubleType));
+    printf("Size of char: %zu byte\n", sizeof(charType));
+    
+    return 0;
+}
+`;
 
 function App() {
 
 	// State variable to set users source code
-	const [userCode, setUserCode] = useState(``);
+	const [code, setCode] = useState(javascriptDefault);
 
 	// State variable to set editors default language
-	const [userLang, setUserLang] = useState("python");
+	const [language, setLanguage] = useState(languageOptions[5]);
+	//const [langID, setLangID] = useState("")
 
 	// State variable to set editors default theme
 	const [userTheme, setUserTheme] = useState("vs-dark");
@@ -20,7 +41,7 @@ function App() {
 	const [fontSize, setFontSize] = useState(20);
 
 	// State variable to set users input
-	const [userInput, setUserInput] = useState("");
+	const [customInput, setCustomInput] = useState("");
 
 	// State variable to set users output
 	const [userOutput, setUserOutput] = useState("");
@@ -33,23 +54,29 @@ function App() {
 		fontSize: fontSize
 	}
 
-	// Function to call the compile endpoint
-	function compile() {
-		setLoading(true);
-		if (userCode === ``) {
-			return
-		}
+	useEffect(() => {
+        console.log('Page loaded ID: ', language.id);
+    }, []);
 
-		// Post request to compile endpoint
-		Axios.post(`http://localhost:8000/compile`, {
-			code: userCode,
-			language: userLang,
-			input: userInput
-		}).then((res) => {
-			setUserOutput(res.data.output);
-		}).then(() => {
-			setLoading(false);
-		})
+	// Function to call the compile endpoint
+	const compile = async() => {
+
+		
+
+		const formData = {
+			language_id: language.id,
+			source_code: btoa(code),
+			stdin: btoa(customInput),
+		}
+		
+		try {
+			const res = await compileSourceCode(formData);
+			setUserOutput(res.data)
+			console.log(res.data);
+
+		} catch(error) {
+			console.log(error);
+		}
 	}
 
 	// Function to clear the output screen
@@ -60,7 +87,7 @@ function App() {
 	return (
 		<div className="App">
 			<Navbar
-				userLang={userLang} setUserLang={setUserLang}
+				userLang={language} setUserLang={setLanguage}
 				userTheme={userTheme} setUserTheme={setUserTheme}
 				fontSize={fontSize} setFontSize={setFontSize}
 			/>
@@ -71,10 +98,9 @@ function App() {
 						height="calc(100vh - 50px)"
 						width="100%"
 						theme={userTheme}
-						language={userLang}
-						defaultLanguage="python"
-						defaultValue="# Enter your code here"
-						onChange={(value) => { setUserCode(value) }}
+						language={language}
+						defaultLanguage="C"
+						onChange={(value) => { setCode(value) }}
 					/>
 					<button className="run-btn" onClick={() => compile()}>
 						Run
@@ -84,7 +110,7 @@ function App() {
 					<h4>Input:</h4>
 					<div className="input-box">
 						<textarea id="code-inp" onChange=
-							{(e) => setUserInput(e.target.value)}>
+							{(e) => setCustomInput(e.target.value)}>
 						</textarea>
 					</div>
 					<h4>Output:</h4>
