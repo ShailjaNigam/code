@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Editor from "@monaco-editor/react";
 import Navbar from './Components/Navbar';
-import spinner from './spinner.svg';
-import toast, {Toaster} from 'react-hot-toast';
 import { languageOptions } from './languageOptions';
 import {compileSourceCode} from './API/compileAPI';
+import toast, { Toaster } from 'react-hot-toast';
+import 'react-toastify/dist/ReactToastify.css';
 
 const javascriptDefault = 
 `#include<stdio.h>
@@ -31,7 +31,7 @@ function App() {
 	const [code, setCode] = useState(javascriptDefault);
 
 	// State variable to set editors default language
-	const [language, setLanguage] = useState(languageOptions[5]);
+	const [language, setLanguage] = useState(languageOptions[4]);
 	//const [langID, setLangID] = useState("")
 
 	// State variable to set editors default theme
@@ -56,13 +56,14 @@ function App() {
 
 	useEffect(() => {
         console.log('Page loaded ID: ', language.id);
+		setCode(javascriptDefault);
     }, []);
 
 	// Function to call the compile endpoint
 	const compile = async() => {
 
 		
-
+		setLoading(true);
 		const formData = {
 			language_id: language.id,
 			source_code: btoa(code),
@@ -71,7 +72,20 @@ function App() {
 		
 		try {
 			const res = await compileSourceCode(formData);
-			setUserOutput(res.data)
+			setLoading(false);
+
+			if (res.status === 200) {
+				
+					setUserOutput(res.data);
+					toast.success("Compilation Successfull...");
+			} else {
+				
+					setUserOutput('Complilation Error!');
+					toast.error("Compilation Error!");
+
+			}
+			
+			
 			console.log(res.data);
 
 		} catch(error) {
@@ -85,7 +99,42 @@ function App() {
 	}
 
 	return (
+<>
+			<Toaster
+			position="top-right"
+			reverseOrder={false}
+			gutter={8}
+			containerClassName=""
+			containerStyle={{}}
+			toastOptions={{
+				// Define default options
+				className: '',
+				duration: 5000,
+				style: {
+				background: 'white',
+				color: 'black',
+				},
+
+				// Default options for specific types
+				success: {
+				duration: 3000,
+				theme: {
+					primary: 'green',
+					secondary: 'black',
+				},
+				},
+				error: {
+					duration: 3000,
+					theme: {
+						primary: 'red',
+						secondary: 'black',
+					},
+					},
+			}}
+			/>
+
 		<div className="App">
+
 			<Navbar
 				userLang={language} setUserLang={setLanguage}
 				userTheme={userTheme} setUserTheme={setUserTheme}
@@ -98,8 +147,8 @@ function App() {
 						height="calc(100vh - 50px)"
 						width="100%"
 						theme={userTheme}
-						language={language}
-						defaultLanguage="C"
+						language={language.value}
+						defaultLanguage="c"
 						onChange={(value) => { setCode(value) }}
 					/>
 					<button className="run-btn" onClick={() => compile()}>
@@ -115,21 +164,22 @@ function App() {
 					</div>
 					<h4>Output:</h4>
 					{loading ? (
-						<div className="spinner-box">
-							<img src={spinner} alt="Loading..." />
-						</div>
-					) : (
-						<div className="output-box">
-							<pre>{userOutput}</pre>
-							<button onClick={() => { clearOutput() }}
-								className="clear-btn">
-								Clear
-							</button>
-						</div>
+    						<div className="spinner-box">
+        						<div className="spinner"></div>
+   							</div>
+						) : (
+    						<div className="output-box">
+        						<pre>{userOutput}</pre>
+        						<button onClick={() => { clearOutput() }} className="clear-btn">
+            					Clear
+        						</button>
+    						</div>
 					)}
+
 				</div>
 			</div>
 		</div>
+	</>
 	);
 }
 

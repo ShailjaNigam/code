@@ -31,7 +31,7 @@
 }
 
 .input-box textarea {
-	font-size: 16px;
+	font-size: 25px;
 }
 
 .spinner-box {
@@ -43,9 +43,23 @@
 	align-items: center;
 }
 
-.spinner-box img {
-	width: 200px;
+.spinner {
+    width: 100px; /* Adjust width as needed */
+    height: 100px; /* Adjust height as needed */
+    border: 10px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #afec3f; /* Adjust color as needed */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
 
 .output-box {
 	flex: 50%;
@@ -72,12 +86,13 @@
 }
 
 .output-box pre {
-	font-size: 15px;
+	font-size: 25px;
 	white-space: pre-wrap;
 }
 
 h4 {
 	color: #afec3f;
+	font-size: 30px;
 }
 
 #code-inp {

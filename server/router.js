@@ -9,7 +9,8 @@ const checkStatus = async (token, res) => {
         params: { base64_encoded: "true", fields: "*" },
         headers: {
             "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-            'X-RapidAPI-Key': '4c2cf46294mshde1e56de49f4c7bp1e6f52jsn127d71bae2f9',
+            "X-RapidAPI-Key":
+              "26f397d828msh57887dad54691fap13b5e9jsnd60485118279",
         },
     };
     try {
@@ -24,7 +25,14 @@ const checkStatus = async (token, res) => {
         } else {
             //setProcessing(false);
             const output = atob(response.data.stdout);
-            res.status(200).json(output);
+
+            if (output === null) {
+                res.status(202).json('Error!');
+                console.log("error:" ,response.data)
+            } else {
+                res.status(200).json(output);
+            }
+            
            // setOutputDetails(response.data);
            // showSuccessToast(`Compiled Successfully!`);
             console.log("output: ", response.data.stdout);
@@ -59,7 +67,8 @@ router.post("/compile", async (req, res) => {
             "content-type": "application/json",
             "Content-Type": "application/json",
             "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-            'X-RapidAPI-Key': "4c2cf46294mshde1e56de49f4c7bp1e6f52jsn127d71bae2f9"
+            "X-RapidAPI-Key":
+              "26f397d828msh57887dad54691fap13b5e9jsnd60485118279",
         },
         data: formData,
 
@@ -67,7 +76,7 @@ router.post("/compile", async (req, res) => {
 
     try {
         const response = await axios.request(options);
-        console.log("output: " , response.data);
+        console.log("token: " , response.data);
         const token = response.data.token;
         // Call checkStatus function with res object
         await checkStatus(token, res);
