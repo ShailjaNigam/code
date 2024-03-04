@@ -7,31 +7,15 @@ import {compileSourceCode} from './API/compileAPI';
 import toast, { Toaster } from 'react-hot-toast';
 
 
-const javascriptDefault = 
-`#include<stdio.h>
-int main() {
-    int intType;
-    float floatType;
-    double doubleType;
-    char charType;
 
-    // sizeof evaluates the size of a variable
-    printf("Size of int: %zu bytes\n", sizeof(intType));
-    printf("Size of float: %zu bytes\n", sizeof(floatType));
-    printf("Size of double: %zu bytes\n", sizeof(doubleType));
-    printf("Size of char: %zu byte\n", sizeof(charType));
-    
-    return 0;
-}
-`;
 
 function App() {
 
 	// State variable to set users source code
-	const [code, setCode] = useState(javascriptDefault);
+	const [code, setCode] = useState("");
 
 	// State variable to set editors default language
-	const [language, setLanguage] = useState(languageOptions[4]);
+	const [language, setLanguage] = useState(languageOptions[0]);
 	//const [langID, setLangID] = useState("")
 
 	// State variable to set editors default theme
@@ -56,7 +40,7 @@ function App() {
 
 	useEffect(() => {
         console.log('Page loaded ID: ', language.id);
-		setCode(javascriptDefault);
+		setCode('');
     }, []);
 
 	// Function to call the compile endpoint
@@ -151,7 +135,7 @@ function App() {
 						width="100%"
 						theme={userTheme}
 						language={language.value}
-						defaultLanguage="c"
+						defaultLanguage="javascript"
 						onChange={(value) => { setCode(value) }}
 					/>
 					<button className="run-btn" onClick={() => compile()}>
